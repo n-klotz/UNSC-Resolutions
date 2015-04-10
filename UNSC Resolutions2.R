@@ -5,7 +5,7 @@
 library(XML)
 library(stringr)
 
-setwd("~/Desktop")
+setwd("/Users/nklotz/Documents/IT/R/UNSC Resolutions/")
 startYear <- 1946
 endYear <- as.numeric(format(Sys.Date(), "%Y")) # current year
 years <- c(startYear:endYear) # vector with all years from which resolutions shall be scrapped
@@ -59,9 +59,6 @@ for(theurl in urls) {
   resolutions <- rbind.data.frame(resolutions, tmp) # combine with dataset
 } # end for-loop
 
-# cleanup
-rm(tmp, baseURL, endYear, startYear, i, link, link.list, links, n.rows, suffix, site, tables, theurl, urls, years)
-
 resolutions$V1 <- as.character(resolutions$V1)
 resolutions$V1[resolutions$V1=="S/RES/1331 2000)"] <- "S/RES/1331 (2000)" # correct error
 resolutions <- cbind.data.frame(resolutions, str_split_fixed(resolutions$V1, '[[:space:]]\\(', 2)) # split resolution name and year
@@ -101,5 +98,10 @@ resolutions$Topic <- as.character(resolutions$Topic)
 resolutions$Topic <- as.character(lapply(resolutions$Topic, .simpleCap))
 
 # Save files
+#filename.r <- paste0("UNSC_Resolutions_", startYear, "-", endYear, ".RData")
+#filename.csv <- paste0("UNSC_Resolutions_", startYear, "-", endYear, ".csv")
 write.csv2(resolutions, file = "UNSC_Resolutions.csv")
 save(resolutions, file = "UNSC_Resolutions.RData")
+
+# cleanup
+rm(tmp, baseURL, endYear, startYear, i, link, link.list, links, n.rows, suffix, site, tables, theurl, urls, years)
